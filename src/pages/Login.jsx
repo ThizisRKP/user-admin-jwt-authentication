@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -26,7 +27,7 @@ const Login = () => {
     }
   };
   return (
-    <>
+    <div>
       <form onSubmit={submit}>
         <input
           placeholder="email"
@@ -43,10 +44,11 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button type="submit">Login</button>
+        <p style={{textAlign:"center"}}>Don't you have account ? <Link to = "/register">Register</Link></p>
       </form>
-
       
-    </>
+      
+    </div>
   );
 };
 
