@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import api from "../api";
 import { Link } from "react-router-dom";
 
+
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,7 +22,7 @@ const Login = () => {
       setEmail("");
       setPassword("");
       nav("/");
-      window.location.reload();
+
   
     } catch (error) {
       console.log(error);
@@ -44,7 +46,7 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button type="submit">Login</button>
-        <p style={{textAlign:"center"}}>Don't you have account ? <Link to = "/register">Register</Link></p>
+        <p style={{textAlign:"center" , color : "white"}}>Don't you have account ? <Link to = "/register" style={{marginLeft :"10px"}}>Register</Link></p>
       </form>
       
       

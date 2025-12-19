@@ -18,24 +18,35 @@ const Register = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+
   const submit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await api.post("/register", form);
-      console.log(res);
-      setForm({
-    name: "",
-    email: "",
-    password: "",
-    role: "",
-    adminCode: "",
-    imageUrl: "",
+  e.preventDefault();
+
+  const payload = { ...form };
+
+  if (payload.role !== "admin") {
+    delete payload.adminCode;
+  }
+
+  try {
+    const res = await api.post("/register", payload);
+    alert(res.data.message + "🎉, Login with correct mail and password");
+    setForm({
+      name : "",
+      email : "",
+      password : "",
+      role : "",
+      adminCode : "",
+      imageUrl : ""
     })
-      alert(res.data.message);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  } catch (error) {
+  console.log(error.response?.data);
+  alert(error.response?.data?.message || "Registration failed");
+
+}
+};
+
+
   return (
     <div className="register-wrapper">
       <form onSubmit={submit}>
@@ -57,7 +68,7 @@ const Register = () => {
           onChange={change}
         />
         <input
-          type="text"
+          type="password"
           required
           value={form.password}
           name="password"
@@ -65,6 +76,7 @@ const Register = () => {
           onChange={change}
         />
         <select value={form.role} required name="role" onChange={change}>
+        <option value="" disabled></option>
           <option value="user">user</option>
           <option value="admin">admin</option>
         </select>
@@ -88,7 +100,7 @@ const Register = () => {
 
         <button type="submit">register</button>
       </form>
-      <p style={{color : "purple",textAlign :"center"}}>wanna go login page ? <Link to="/login">Login</Link></p>
+      <p style={{color : "black",textAlign :"center"}}>wanna go login page ? <Link to="/login" style={{marginLeft :"10px"}}>Login</Link></p>
     </div>
   );
 };

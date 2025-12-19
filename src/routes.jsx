@@ -6,46 +6,92 @@ import Dashboard from "./pages/Dashboard";
 import Admin from "./pages/Admin";
 import EditUser from "./pages/EditUser";
 import NotFound from "./pages/NotFound";
-
-const token = localStorage.getItem("accessToken");
-
-// if there is toke in localstorage then isAuth = true, if no token in localstorage then false in isAuth variable
-const isAuth = token ? true : false;
-
-// if the local storage have item role= admin then isAdmin fn returns true, if role = user then return false
-const isAdmin = () => localStorage.getItem("role") === "admin";
+import ProtectedRoute from "./pages/ProtectedRoute";
 
 const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
-  {
-    path: "/register",
-    element: <Register />,
-  },
+  { path: "/register", element: <Register /> },
 
   {
     path: "/",
-    element: <AppLayout />,
+    element: (
+      <ProtectedRoute>
+        <AppLayout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         index: true,
-        element: isAuth ? <Dashboard /> : <Login />,
+        element: <Dashboard />,
       },
 
-      { path: "admin", element: isAuth && isAdmin() ? <Admin /> : <Login /> },
+      {
+        path: "admin",
+        element: (
+          <ProtectedRoute adminOnly>
+            <Admin />
+          </ProtectedRoute>
+        ),
+      },
 
       {
         path: "edit/:id",
-        element: isAuth && isAdmin() ? <EditUser /> : <Login />,
-      },
-      {
-        path: "*",
-        element: <NotFound />,
+        element: (
+          <ProtectedRoute adminOnly>
+            <EditUser />
+          </ProtectedRoute>
+        ),
       },
     ],
   },
+
+  { path: "*", element: <NotFound /> },
 ]);
 
+
 export default router;
+
+
+// const token = localStorage.getItem("accessToken");
+
+// // if there is toke in localstorage then isAuth = true, if no token in localstorage then false in isAuth variable
+// const isAuth = token ? true : false;
+
+// // if the local storage have item role= admin then isAdmin fn returns true, if role = user then return false
+
+// const isAdmin = () => localStorage.getItem("role") === "admin";
+
+// const router = createBrowserRouter([
+//   { path: "/login", element: <Login /> },
+//   {
+//     path: "/register",
+//     element: <Register />,
+//   },
+
+//   {
+//     path: "/",
+//     element: <AppLayout />,
+//     children: [
+//       {
+//         index: true,
+//         element: isAuth ? <Dashboard /> : <Login />,
+//       },
+
+//       { path: "admin", element: isAuth && isAdmin() ? <Admin /> : <Login /> },
+
+//       {
+//         path: "edit/:id",
+//         element: isAuth && isAdmin() ? <EditUser /> : <Login />,
+//       },
+//       {
+//         path: "*",
+//         element: <NotFound />,
+//       },
+//     ],
+//   },
+// ]);
+
+// export default router;
 
 // if a person login as user-> we have to send him to dashboard, where that user can see only their data
 
